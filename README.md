@@ -46,4 +46,4 @@ Finally go to http://localhost:5000/images/node-express-logo.png
 
 Remember, **you don't need to include "public"** in the url You should see this:
 
-![set up](./readMeImages/serve-static-resources-success.png?raw=true)
+![set up](./server/readMeImages/serve-static-resources-success.png?raw=true)
