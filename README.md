@@ -40,8 +40,8 @@
     const port = 5000;
 
     app.use(express.static( 'public'))
-    app.use('/users', Users);
-    app.use('/:id', Users); <----- Add middleware for accepting a param for users route
+
+    app.use('/users', Users); <----- Add middleware for the users route
 
     app.get('/', (req, res) => {
     res.send('Hello World!');
