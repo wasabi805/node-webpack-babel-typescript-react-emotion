@@ -4,13 +4,13 @@ const router = express.Router();
 interface iUsers {
   id: number;
   name: string;
-  ocupation: string;
+  occupation: string;
 }
 
 const users: iUsers[] = [
-  { id: 1, name: "Matt Murdock", ocupation: "Lawyer" },
-  { id: 2, name: "Jennifer Walters", ocupation: "Attorney" },
-  { id: 3, name: "Peter Parker", ocupation: "Photographer" },
+  { id: 1, name: "Matt Murdock", occupation: "Lawyer" },
+  { id: 2, name: "Jennifer Walters", occupation: "Attorney" },
+  { id: 3, name: "Peter Parker", occupation: "Photographer" },
 ];
 
 router.get("/", (req, res) => {
