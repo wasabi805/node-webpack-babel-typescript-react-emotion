@@ -1,50 +1,49 @@
-![set up](./src/images/webpack-babel-typescript-react.png?raw=true)
+<!-- ![set up](./src/images/webpack-babel-typescript-react.png?raw=true) -->
 
-# NODE SET UP
+# Serving Static Assets
 
-[see](https://www.digitalocean.com/community/tutorials/setting-up-a-node-project-with-typescript)
+For more on serving static assets, see the [docs](https://expressjs.com/en/starter/static-files.html)
 
-create a server directory in root dir
-cd into server directory and run npm init
+## Update Directory structure
 
-install ts-node
+Build your directory structure so it looks like below; Add an image into server/public/images
 
-    npm i ts-node
+    -server
+      -public
+        -images
+          *node-express-logo.png
+      -src
+      -app.js
 
-install express
+- Add the use middleware and pass into use express.static()
+- Then pass 'public' into express.static
 
-    npm install --save express
+See below:
 
-then install typescript
+    // inside app.js
 
-    npm install --save-dev typescript -save-dev @types/express
+    const express = require('express')
 
-then create a tsconfig.json file in server directory and add:
+    const app = express()
+    const port = 5000
 
-    // inside tsconfig.json
+    // use the express middleware for static
+    app.use(express.static( 'public'))
 
-    {
-      "compilerOptions": {
-        "module": "commonjs",
-        "esModuleInterop": true,
-        "target": "es6",
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "outDir": "dist"
-      },
-      "lib": ["es2015"]
-    }
+    app.get('/', (req, res)=>{
+        res.send('Hello Tim')
+    })
 
-in server create am src directory with and app.ts file init
+    app.listen(port, ()=>{
+        console.log(`Listening on port ${port}`)
+    })
 
-Allow the [useage of import and exports in express](https://github.com/TypeStrong/ts-node/issues/1171#issuecomment-798929168)
-add this script in package.json
-
-    // inside package.json
-    scripts:{
-      server: "server": "node app.ts --experimental-modules server.mjs"
-    }
-
-Run the server script :
+cd into server directory and run :
 
     npm run server
+
+Finally go to http://localhost:5000/images/node-express-logo.png
+
+Remember, **you don't need to include "public"** in the url You should see this:
+
+![set up](./readMeImages/serve-static-resources-success.png?raw=true)
