@@ -1,9 +1,13 @@
 import express from 'express';
+import Users from './src/routes/users'
 
 const app = express();
 const port = 5000;
 
 app.use(express.static( 'public'))
+app.use('/users', Users);
+
+
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
