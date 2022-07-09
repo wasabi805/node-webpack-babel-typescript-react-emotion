@@ -6,6 +6,7 @@ const port = 5000;
 
 app.use(express.static( 'public'))
 app.use('/users', Users);
+app.use('/:id', Users);
 
 
 

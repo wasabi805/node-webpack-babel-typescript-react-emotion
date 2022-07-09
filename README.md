@@ -1,54 +1,13 @@
 <!-- ![set up](./src/images/webpack-babel-typescript-react.png?raw=true) -->
 
-# Seperating Routes from app.ts
+# Route with Params
 
-In the scr directory, make a routes folder with a users.ts file inside it
+## Add a route that accepts a param
 
-    example.)
-      -server
-        -src
-          -routes
-            *users.ts
+    // inside src/routes/users.ts
 
-add some users inside server/src/routes/users.ts
-
-    // inside server/src/routes/users.ts
-
-    interface iUsers{
-      name: string
-      ocupation: string
-    }
-
-    const users: iUsers[] = [
-        {name: 'Matt Murdock' , ocupation:'Lawyer'},
-            {name: 'Jennifer Walters' , ocupation:'Attorney'},
-            {name: 'Peter Parker' , ocupation:'Photographer'}
-      ]
-
-## Make a seperate Route
-
-[see](https://stackoverflow.com/questions/6059246/how-to-include-route-handlers-in-multiple-files-in-express)
-
-Add a router to this file:
-
-    // inside server/src/routes/users.ts
-
-    import express from 'express';    <----- import express
-    const router = express.Router()   <----- iinstantiate a router
-
-    interface iUsers{
-      name: string
-      ocupation: string
-    }
-    const users = [
-        {name: 'Matt Murdock' , ocupation:'Lawyer'},
-            {name: 'Jennifer Walters' , ocupation:'Attorney'},
-            {name: 'Peter Parker' , ocupation:'Photographer'}
-        ]
-
-then create a route and export it:
-
-    // inside server/src/routes/users.ts
+    import express from 'express';
+    const router = express.Router()
 
     interface iUsers{
         name: string
@@ -61,25 +20,19 @@ then create a route and export it:
             {name: 'Peter Parker' , ocupation:'Photographer'}
         ]
 
-    router.get('/', (req, res)=>{       <----- make the route
+    router.get('/', (req, res)=>{
         res.send(users)
     })
 
-    export default router               <----- export the route
+    router.get('/:id',(req, res)=>{   <----- Add a route to accept a param
+        res.send(users)
+    })
 
-## Implement the route in app.js
+    export default router
 
-import the the route like so:
+## Update app.ts with use Middleware for param
 
-    //inside server/app.js
-
-    ...
-    import Users from './src/routes/users'
-    ...
-
-Then, implement the use middleware:
-
-    // inside app.js
+    // inside app.ts
     import express from 'express';
     import Users from './src/routes/users'
 
@@ -87,36 +40,49 @@ Then, implement the use middleware:
     const port = 5000;
 
     app.use(express.static( 'public'))
-
-    app.use('/users', Users);          <---- Add the users to app.js
+    app.use('/users', Users);
+    app.use('/:id', Users); <----- Add middleware for accepting a param for users route
 
     app.get('/', (req, res) => {
-      res.send('Hello World!');
+    res.send('Hello World!');
     });
 
     app.listen(port, () => {
-      return console.log(`Express is listening at http://localhost:${port}`);
+    return console.log(`Express is listening at http://localhost:${port}`);
     });
 
-Finally, in order to see this route, in the browser, go to :
+## Verify You Can Hit the Users Route with a Param
 
-    http://localhost:5000/users/
+go to http://localhost:5000/users/2 and make sure it doesn't break:
 
-Somthing to point out is that that we are able to access /users in localhost:5000 because in the scr/routes/users.ts because the route was set to '/'
+you should see:
 
-ie.)
+![set up](./server/readMeImages/route-with-param-verify-param.png?raw=true)
+
+## Update the route to select by id
+
+add ids to the user object:
+
+    // inside src/routes/users.ts
+    const users: iUsers[] = [
+        {id: 1, name: 'Matt Murdock' , ocupation:'Lawyer'},
+        {id: 2, name: 'Jennifer Walters' , ocupation:'Attorney'},
+        {id: 3, name: 'Peter Parker' , ocupation:'Photographer'}
+    ]
+
+modify the /:id route to grab the param:
 
     // inside src/routes/users.ts
 
-    router.get('/', (req, res)=>{
-        res.send(users)
+    router.get('/:id',(req, res)=>{
+        const {id} = req.params
+        const userId = parseInt(id, 10)
+
+        const user = users.filter((user)=>user.id === userId)
+
+        res.send(user)
     })
 
-and in app.ts, **/user** was passed into app.use()
+Now if you go back to http://localhost:5000/users/2 you should see the individal user:
 
-ie.)
-
-    // inside app.ts
-    app.use('/users', Users);
-
-So what we are saying here is that the /users route will send back the users array of objects in src/routes/users.ts
+![set up](./server/readMeImages/route-with-param-individ-user.png?raw=true)
