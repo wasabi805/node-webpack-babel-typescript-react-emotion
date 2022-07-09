@@ -15,7 +15,8 @@
   },
   "scripts": {
     "server": "node --loader ts-node/esm ./app.ts",
-    "nodemon": "nodemon ./app.ts"
+    "nodemon": "nodemon ./app.ts",
+    "format": "npx prettier --write ."
   },
   "author": "",
   "license": "ISC"
