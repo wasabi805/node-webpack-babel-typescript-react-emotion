@@ -9,8 +9,9 @@
     "format": "npx prettier --write .",
     "test": "jest",
     "dev": "webpack server",
-    "start": "webpack-dev-server --open --mode development --hot",
-    "build": "webpack --mode production"
+    "devServer": "webpack-dev-server --open --mode development --hot",
+    "build": "webpack --mode production",
+    "start": "concurrently \"npm run devServer\" \"cd server && npm run nodemon\""
   },
   "jest": {
     "transform": {
@@ -59,9 +60,11 @@
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@types/react": "^18.0.15",
+    "concurrently": "^7.2.2",
     "jest-cli": "^28.1.2",
     "jest-environment-jsdom": "^28.1.2",
     "lodash": "^4.17.21",
+    "nodemon": "^2.0.19",
     "require": "^2.4.20",
     "ts-jest": "^28.0.5"
   }

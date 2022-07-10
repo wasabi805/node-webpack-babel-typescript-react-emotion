@@ -1,6 +1,7 @@
 import express from "express";
 const router = express.Router();
-import axios from 'axios';
+import axios,{ AxiosResponse, AxiosPromise} from 'axios';
+// see https://stackoverflow.com/q/62217642/7857134
 
 interface iUsers {
   id: number;
@@ -8,7 +9,13 @@ interface iUsers {
   occupation: string;
 }
 
-const fetchApi= ({method, url})=>{
+interface iFetchApi{
+  method: string,
+  url: string
+}
+
+
+const fetchApi= ({method, url}: iFetchApi ): AxiosPromise =>{
     return axios({
         method: method,
         url: url,
@@ -23,7 +30,9 @@ const users: iUsers[] = [
 
 router.get("/", async(req, res) => {
     let url = 'https://jsonplaceholder.typicode.com/users'
-    const response = await fetchApi({method: "GET", url})
+
+    const response: AxiosResponse = await fetchApi({method: "GET", url})
+
     res.send(response.data);
 });
 
