@@ -1,10 +1,18 @@
 import express from "express";
 const router = express.Router();
+import axios from 'axios';
 
 interface iUsers {
   id: number;
   name: string;
   occupation: string;
+}
+
+const fetchApi= ({method, url})=>{
+    return axios({
+        method: method,
+        url: url,
+      });
 }
 
 const users: iUsers[] = [
@@ -13,8 +21,10 @@ const users: iUsers[] = [
   { id: 3, name: "Peter Parker", occupation: "Photographer" },
 ];
 
-router.get("/", (req, res) => {
-  res.send(users);
+router.get("/", async(req, res) => {
+    let url = 'https://jsonplaceholder.typicode.com/users'
+    const response = await fetchApi({method: "GET", url})
+    res.send(response.data);
 });
 
 router.get("/:id", (req, res) => {
