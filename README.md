@@ -1,4 +1,4 @@
-<!-- ![set up](./src/images/webpack-babel-typescript-react.png?raw=true) -->
+<!-- ![set up](./server/readMeImages/route-with-param-individ-user.png?raw=true) -->
 
 # Route with Params
 
