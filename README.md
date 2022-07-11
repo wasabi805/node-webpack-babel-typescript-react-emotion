@@ -1,14 +1,36 @@
 <!-- ![set up](./server/readMeImages/route-with-param-individ-user.png?raw=true) -->
 
-# Set up concurrently
+# Proxy back end
 
-In the root of the project install nodemon as well
+## Installation
 
-        npm i nodemon
+cd into server directory and run
 
-change the script for start in root package.json to :
+        npm i cors
+        npm i --save-dev @types/cors
 
-    "start": "concurrently \"npm run devServer\" \"cd server && npm run nodemon\""
+## Implement CORS
 
-Notes:
-[Axios types: see](https://stackoverflow.com/q/62217642/7857134)
+        // in server/app.ts
+
+        import cors from 'cors'
+        ...
+        app.use(cors())
+
+## Update package.json
+
+        //inside package.json from the front end
+
+        "proxy": "http://localhost:5000"
+
+# Add body-parser
+
+We need this so the body param ins req will show up on the back end
+
+in server
+
+        npm i body-parser @types/body-parser
+
+then in server/app.ts
+
+import bodyParser from "body-parser";

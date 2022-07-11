@@ -1,9 +1,21 @@
 import express from "express";
 import Users from "./src/routes/users";
 import Posts from "./src/routes/posts";
+import cors from "cors";
+
+import bodyParser from "body-parser";
+const jsonParser = bodyParser.json();
 
 const app = express();
 const port = 5000;
+
+/* cors */
+app.use(cors());
+
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// parse application/json
+app.use(bodyParser.json());
 
 /* Assets */
 app.use(express.static("public"));

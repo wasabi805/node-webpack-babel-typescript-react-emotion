@@ -1,35 +1,59 @@
 import express from "express";
+import axios, { AxiosPromise } from "axios";
 const router = express.Router();
 
 import { fetchApi } from "./helpers";
 
-interface iUsers {
+interface iUser {
   id: number;
   name: string;
-  occupation: string;
+  username: string;
+  email: string;
+  address: {
+    street: string;
+    suite: string;
+    city: string;
+    zipcode: string;
+    geo?: {};
+  };
+  phone: string;
+  website: string;
+  company: {
+    name: string;
+    catchPhrase: string;
+    bs: string;
+  };
 }
 
-const users: iUsers[] = [
-  { id: 1, name: "Matt Murdock", occupation: "Lawyer" },
-  { id: 2, name: "Jennifer Walters", occupation: "Attorney" },
-  { id: 3, name: "Peter Parker", occupation: "Photographer" },
-];
+let users: iUser[] | AxiosPromise[] | any = [];
 
 router.get("/", async (req, res) => {
   let url = "https://jsonplaceholder.typicode.com/users";
-
-  const response = await fetchApi({ method: "GET", url });
-
-  res.send(response);
+  if (users.length === 0) {
+    const response = await fetchApi({ method: "GET", url });
+    users = response;
+    res.send(users);
+  } else {
+    res.send(users);
+  }
 });
 
-router.get("/:id", (req, res) => {
-  const { id } = req.params;
-  const userId = parseInt(id, 10);
+router.post("/add-user", (req, res) => {
+  const { firstName, lastName } = req.body;
+  const newUser = {
+    id: users.length + 1,
+    name: `${firstName} ${lastName}`,
+  };
+  users.push(newUser);
+  res.send(users);
+});
 
-  const user = users.filter((user) => user.id === userId);
+router.post("/delete-user", (req, res) => {
+  const { id } = req.body;
+  const userId: number = parseInt(id, 10);
 
-  res.send(user);
+  users = users.filter((user: iUser) => user.id !== userId);
+  res.send(users);
 });
 
 export default router;

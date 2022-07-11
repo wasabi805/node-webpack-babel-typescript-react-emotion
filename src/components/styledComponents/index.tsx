@@ -3,14 +3,12 @@ import styled from "@emotion/styled";
 // example 1 : Basic Useage
 export const Wrapper = styled("div")`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: "Adistro";
-  color: white;
-  background: magenta;
-  height: 200px;
-  width: 200px;
   border-radius: 5px;
+
+  color: cyan;
 `;
 
 //example 2 : Another Basic Useage
@@ -19,8 +17,13 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+  margin-bottom: 2rem;
 
-  color: yellow;
+  & h1 {
+    font-family: "Adistro";
+  }
+
+  color: magenta;
   background: LightSlateGrey;
   height: 500px;
   width: 500px;
@@ -51,4 +54,11 @@ export const Button = styled.button`
     padding: 0 1rem;
     border;
     cursor: pointer;
+    margin-top: 2rem
+`;
+
+export const Input = styled.input`
+  margin-bottom: 0.5rem;
+  height: 2rem;
+  width: 18rem;
 `;
