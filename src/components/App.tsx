@@ -84,32 +84,44 @@ const App = () => {
       });
   };
 
-  const handleEdit = (e: any) => {
-    const { id, value } = e.target;
-    const editId = id.split("-")[1];
-
-    const hasId = state.edit.filter((id) => id === editId).length > 0;
-
-    !hasId
-      ? setState({
-          ...state,
-          edit: state.edit.concat(editId),
-          editForm: [
-            ...state.editForm,
-            { id: `editform-${editId}`, name: value },
-          ],
-        })
-      : setState({
-          ...state,
-          edit: state.edit.filter((id) => id !== editId),
-        });
-  };
-
   const isEdit = (userId: any) => {
     return (
       state.edit.filter((editId: any) => parseInt(editId, 10) === userId)
         .length > 0
     );
+  };
+
+  const handleEdit = async (e: any) => {
+    const { id, value } = e.target;
+    const editId = id.split("-")[1];
+
+    const hasId = state.edit.filter((id) => id === editId).length > 0;
+
+    const createEditForm = () => {
+      setState({
+        ...state,
+        edit: state.edit.concat(editId),
+        editForm: [
+          ...state.editForm,
+          { id: `editform-${editId}`, name: value },
+        ],
+      });
+    };
+
+    const upDateChanges = async () => {
+      setState({
+        ...state,
+        edit: state.edit.filter((id) => id !== editId),
+      });
+
+      await fetch("http://localhost:5000/users/edit-user", {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify({ users: state.users }),
+      });
+    };
+
+    !hasId ? createEditForm() : upDateChanges();
   };
 
   useEffect(() => {
@@ -172,55 +184,48 @@ const App = () => {
         <Wrapper>
           <Wrapper className="user-list">
             <table>
-              {state.users.map((user: any) => {
-                return (
-                  <tr>
-                    <td>
-                      {" "}
-                      {isEdit(user.id) ? (
-                        <input
-                          id={`editForm-${user.id}`}
-                          value={user?.name}
-                          onChange={handleEditFormChange}
-                        />
-                      ) : (
-                        user?.name
-                      )}
-                    </td>
+              <tbody>
+                {state.users.map((user: any, idx: number) => {
+                  return (
+                    <tr key={`user-data-row${idx}`}>
+                      <td>
+                        {" "}
+                        {isEdit(user.id) ? (
+                          <input
+                            id={`editForm-${user.id}`}
+                            value={user?.name}
+                            onChange={handleEditFormChange}
+                          />
+                        ) : (
+                          user?.name
+                        )}
+                      </td>
 
-                    <td>
-                      <button
-                        id={`edit-${user?.id}`}
-                        value={user.name}
-                        className="button"
-                        onClick={handleEdit}
-                      >
-                        edit
-                      </button>
-                    </td>
-
-                    <td>
-                      {isEdit(user.id) ? (
+                      <td>
                         <button
-                          id={`approve-${user?.id}`}
+                          id={`edit-${user?.id}`}
+                          value={user.name}
                           className="button"
                           onClick={handleEdit}
                         >
-                          Approve
+                          Edit
                         </button>
-                      ) : (
+                      </td>
+
+                      <td>
                         <button
                           id={user.id}
                           className="button"
                           onClick={handleDelete}
+                          disabled={isEdit(user.id)}
                         >
                           Delete
                         </button>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
             </table>
           </Wrapper>
         </Wrapper>

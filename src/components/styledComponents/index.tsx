@@ -23,7 +23,7 @@ export const Container = styled.div`
     font-family: "Adistro";
   }
 
-  color: magenta;
+  color: #9d4bb3;
   background: LightSlateGrey;
   height: 500px;
   width: 500px;

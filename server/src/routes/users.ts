@@ -48,6 +48,13 @@ router.post("/add-user", (req, res) => {
   res.send(users);
 });
 
+router.post("/edit-user", (req, res) => {
+  const updatedUsers = req.body.users;
+  users = updatedUsers;
+
+  res.send(users);
+});
+
 router.post("/delete-user", (req, res) => {
   const { id } = req.body;
   const userId: number = parseInt(id, 10);
