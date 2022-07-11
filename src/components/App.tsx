@@ -1,11 +1,7 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import {
-  Container,
-  Wrapper,
-  ExtendedWrapper,
-  Button,
-  Input,
-} from "./styledComponents";
+import { BACKEND_API } from "../constants";
+import { callApi } from "../helpers";
+import { Container, Wrapper, Button, Input } from "./styledComponents";
 
 interface iState {
   users: any;
@@ -33,55 +29,46 @@ const App = () => {
   };
 
   const loadUsers = async () => {
-    try {
-      const users = await fetch("http://localhost:5000/users")
-        .then((res) => {
-          return res.json();
-        })
-        .then((data) => data);
+    const users = await callApi({
+      method: "GET",
+      url: `${BACKEND_API}/users`,
+    });
 
-      setState({
-        ...state,
-        users,
-      });
-    } catch (err) {
-      console.log("there was an error");
-    }
+    setState({
+      ...state,
+      users,
+    });
   };
 
   const handleSubmit = async () => {
-    await fetch("http://localhost:5000/users/add-user", {
-      headers: { "Content-Type": "application/json" },
+    const users = await callApi({
       method: "POST",
+      url: `${BACKEND_API}/users/add-user`,
       body: JSON.stringify({
         firstName: state.firstName,
         lastName: state.lastName,
       }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        setState({
-          ...state,
-          users: res,
-        });
-      });
+    });
+
+    setState({
+      ...state,
+      users,
+    });
   };
 
   const handleDelete = async (e: any) => {
     const { id } = e.target;
 
-    await fetch("http://localhost:5000/users/delete-user", {
-      headers: { "Content-Type": "application/json" },
+    const users = await callApi({
       method: "POST",
+      url: `${BACKEND_API}/users/delete-user`,
       body: JSON.stringify({ id }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        setState({
-          ...state,
-          users: res,
-        });
-      });
+    });
+
+    setState({
+      ...state,
+      users: users,
+    });
   };
 
   const isEdit = (userId: any) => {
@@ -114,9 +101,9 @@ const App = () => {
         edit: state.edit.filter((id) => id !== editId),
       });
 
-      await fetch("http://localhost:5000/users/edit-user", {
-        headers: { "Content-Type": "application/json" },
+      await callApi({
         method: "POST",
+        url: `${BACKEND_API}/users/edit-user`,
         body: JSON.stringify({ users: state.users }),
       });
     };
