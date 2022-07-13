@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import { BACKEND_API } from "../constants";
+import { BACKEND_API } from "../utils/constants";
 import { callApi } from "../helpers";
 import { Container, Wrapper, Button, Input } from "./styledComponents";
 
@@ -101,10 +101,17 @@ const App = () => {
         edit: state.edit.filter((id) => id !== editId),
       });
 
+      const editedUser = state.users.filter(
+        (user: any) => user.id === parseInt(editId, 10)
+      )[0];
+
       await callApi({
         method: "POST",
         url: `${BACKEND_API}/users/edit-user`,
-        body: { users: state.users },
+        body: {
+          id: editId,
+          name: editedUser.name,
+        },
       });
     };
 

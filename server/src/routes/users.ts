@@ -3,27 +3,7 @@ import axios, { AxiosPromise } from "axios";
 const router = express.Router();
 
 import { fetchApi } from "./helpers";
-
-interface iUser {
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-  address: {
-    street: string;
-    suite: string;
-    city: string;
-    zipcode: string;
-    geo?: {};
-  };
-  phone: string;
-  website: string;
-  company: {
-    name: string;
-    catchPhrase: string;
-    bs: string;
-  };
-}
+import { iUser } from "../utils/interfaces";
 
 let users: iUser[] | AxiosPromise[] | any = [];
 
@@ -48,9 +28,12 @@ router.post("/add-user", (req, res) => {
   res.send(users);
 });
 
-router.post("/edit-user", (req, res) => {
-  const updatedUsers = req.body.users;
-  users = updatedUsers;
+router.patch("/edit-user", (req, res) => {
+  const { id, name } = req.body;
+  const updateByIndex = users
+    .map((user: iUser) => user.id)
+    .indexOf(parseInt(id, 10));
+  users[updateByIndex].name = name;
 
   res.send(users);
 });
