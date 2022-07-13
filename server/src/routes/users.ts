@@ -1,5 +1,6 @@
 import express from "express";
-import axios, { AxiosPromise } from "axios";
+import { AxiosPromise } from "axios";
+import { v4 as uuidv4 } from "uuid";
 const router = express.Router();
 
 import { fetchApi } from "./helpers";
@@ -11,7 +12,15 @@ router.get("/", async (req, res) => {
   let url = "https://jsonplaceholder.typicode.com/users";
   if (users.length === 0) {
     const response = await fetchApi({ method: "GET", url });
-    users = response;
+
+    const newUsers = Object.values(response).map((user) => {
+      console.log(user);
+      user.id = uuidv4();
+      return user;
+    });
+
+    console.log(newUsers);
+    users = newUsers;
     res.send(users);
   } else {
     res.send(users);
@@ -20,8 +29,9 @@ router.get("/", async (req, res) => {
 
 router.post("/add-user", (req, res) => {
   const { firstName, lastName } = req.body;
+
   const newUser = {
-    id: users.length + 1,
+    id: uuidv4(),
     name: `${firstName} ${lastName}`,
   };
   users.push(newUser);
@@ -30,19 +40,17 @@ router.post("/add-user", (req, res) => {
 
 router.patch("/edit-user", (req, res) => {
   const { id, name } = req.body;
-  const updateByIndex = users
-    .map((user: iUser) => user.id)
-    .indexOf(parseInt(id, 10));
+  console.log({ id, name });
+  const updateByIndex = users.map((user: iUser) => user.id).indexOf(id);
   users[updateByIndex].name = name;
 
   res.send(users);
 });
 
-router.post("/delete-user", (req, res) => {
+router.delete("/delete-user", (req, res) => {
   const { id } = req.body;
-  const userId: number = parseInt(id, 10);
 
-  users = users.filter((user: iUser) => user.id !== userId);
+  users = users.filter((user: iUser) => user.id !== id);
   res.send(users);
 });
 

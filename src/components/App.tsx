@@ -60,7 +60,7 @@ const App = () => {
     const { id } = e.target;
 
     const users = await callApi({
-      method: "POST",
+      method: "DELETE",
       url: `${BACKEND_API}/users/delete-user`,
       body: { id },
     });
@@ -72,15 +72,12 @@ const App = () => {
   };
 
   const isEdit = (userId: any) => {
-    return (
-      state.edit.filter((editId: any) => parseInt(editId, 10) === userId)
-        .length > 0
-    );
+    return state.edit.filter((editId: any) => editId === userId).length > 0;
   };
 
   const handleEdit = async (e: any) => {
     const { id, value } = e.target;
-    const editId = id.split("-")[1];
+    const editId = id.split("edit-")[1];
 
     const hasId = state.edit.filter((id) => id === editId).length > 0;
 
@@ -102,11 +99,11 @@ const App = () => {
       });
 
       const editedUser = state.users.filter(
-        (user: any) => user.id === parseInt(editId, 10)
+        (user: any) => user.id === editId
       )[0];
 
       await callApi({
-        method: "POST",
+        method: "PATCH",
         url: `${BACKEND_API}/users/edit-user`,
         body: {
           id: editId,
@@ -124,7 +121,7 @@ const App = () => {
 
   const handleEditFormChange = (e: any) => {
     const { id, value } = e.target;
-    const userId = parseInt(id.split("-")[1], 10);
+    const userId = id.split("editForm-")[1];
 
     //find the user with userId in the users array
     const updatedUser = {
