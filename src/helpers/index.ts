@@ -1,26 +1,34 @@
 interface iCallApi {
   method: string;
   url: string;
-  body?: string | null;
+  body?: {
+    users?: any;
+    id?: number;
+    firstName?: string;
+    lastName?: string;
+  };
 
-  params?: {} | null;
+  params?: {
+    id?: string;
+  } | null;
 }
 
 export const callApi = async ({ method, url, body, params }: iCallApi) => {
-  try {
-    const options = Object.entries({ method, body, params }).reduce(
-      (acc, [key, val]) => {
-        return val ? { ...acc, [key]: val } : acc;
-      },
-      {}
-    );
+  const options = {
+    method,
+    url,
+    ...(body && { body: JSON.stringify(body) }),
+    ...(params && { params: JSON.stringify(params) }),
+  };
 
+  try {
     const response: Promise<iCallApi> = await fetch(url, {
       ...options,
       headers: { "Content-Type": "application/json" },
     }).then((res) => res.json());
 
-    console.log("what is response", response);
     return response;
-  } catch (error) {}
+  } catch (error) {
+    console.log("there was an error", error);
+  }
 };

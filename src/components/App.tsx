@@ -44,10 +44,10 @@ const App = () => {
     const users = await callApi({
       method: "POST",
       url: `${BACKEND_API}/users/add-user`,
-      body: JSON.stringify({
+      body: {
         firstName: state.firstName,
         lastName: state.lastName,
-      }),
+      },
     });
 
     setState({
@@ -62,7 +62,7 @@ const App = () => {
     const users = await callApi({
       method: "POST",
       url: `${BACKEND_API}/users/delete-user`,
-      body: JSON.stringify({ id }),
+      body: { id },
     });
 
     setState({
@@ -104,7 +104,7 @@ const App = () => {
       await callApi({
         method: "POST",
         url: `${BACKEND_API}/users/edit-user`,
-        body: JSON.stringify({ users: state.users }),
+        body: { users: state.users },
       });
     };
 
@@ -172,46 +172,47 @@ const App = () => {
           <Wrapper className="user-list">
             <table>
               <tbody>
-                {state.users.map((user: any, idx: number) => {
-                  return (
-                    <tr key={`user-data-row${idx}`}>
-                      <td>
-                        {" "}
-                        {isEdit(user.id) ? (
-                          <input
-                            id={`editForm-${user.id}`}
-                            value={user?.name}
-                            onChange={handleEditFormChange}
-                          />
-                        ) : (
-                          user?.name
-                        )}
-                      </td>
+                {state.users &&
+                  state.users.map((user: any, idx: number) => {
+                    return (
+                      <tr key={`user-data-row${idx}`}>
+                        <td>
+                          {" "}
+                          {isEdit(user.id) ? (
+                            <input
+                              id={`editForm-${user.id}`}
+                              value={user?.name}
+                              onChange={handleEditFormChange}
+                            />
+                          ) : (
+                            user?.name
+                          )}
+                        </td>
 
-                      <td>
-                        <button
-                          id={`edit-${user?.id}`}
-                          value={user.name}
-                          className="button"
-                          onClick={handleEdit}
-                        >
-                          Edit
-                        </button>
-                      </td>
+                        <td>
+                          <button
+                            id={`edit-${user?.id}`}
+                            value={user.name}
+                            className="button"
+                            onClick={handleEdit}
+                          >
+                            Edit
+                          </button>
+                        </td>
 
-                      <td>
-                        <button
-                          id={user.id}
-                          className="button"
-                          onClick={handleDelete}
-                          disabled={isEdit(user.id)}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                        <td>
+                          <button
+                            id={user.id}
+                            className="button"
+                            onClick={handleDelete}
+                            disabled={isEdit(user.id)}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
           </Wrapper>
