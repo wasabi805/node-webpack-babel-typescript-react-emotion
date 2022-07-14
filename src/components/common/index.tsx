@@ -48,13 +48,12 @@ interface iButton {
 }
 
 export const Button = styled.button`
-    background: ${(props: iButton) => props?.styling?.someBgColor} ;
-    height: 3rem;
-    width: 4rm;
-    padding: 0 1rem;
-    border;
-    cursor: pointer;
-    margin-top: 2rem
+  background: ${(props: iButton) => props?.styling?.someBgColor};
+  height: 3rem;
+  width: 4rm;
+  padding: 0 1rem;
+  cursor: pointer;
+  margin-top: 2rem;
 `;
 
 export const Input = styled.input`

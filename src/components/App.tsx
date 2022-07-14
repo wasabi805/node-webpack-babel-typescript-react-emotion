@@ -1,8 +1,11 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { BACKEND_API } from "../data/constants";
 import { callApi } from "../utils/helpers";
-import { Container, Wrapper, Button, Input } from "./common";
+import { Container, Wrapper } from "./common";
+import Button, { submitStyle } from "./common/Button";
 import { iUser, iState } from "../interfaces";
+import Input, { signUpStyle } from "./common/Input";
+import UserTable from "./UserTable";
 
 const App = () => {
   const [state, setState] = useState<iState>({
@@ -74,17 +77,14 @@ const App = () => {
       setState({
         ...state,
         edit: state.edit.concat(editId),
-        editForm: [
-          ...state.editForm,
-           { id: `editform-${editId}`, name }],
+        editForm: [...state.editForm, { id: `editform-${editId}`, name }],
       });
     };
 
     const upDateChanges = async () => {
       setState({
         ...state,
-        edit: state.edit.filter((id) => 
-        id !== editId),
+        edit: state.edit.filter((id) => id !== editId),
       });
 
       const editedUser = state.users.filter(
@@ -139,23 +139,20 @@ const App = () => {
         <h1>SIGN UP</h1>
         <Wrapper>
           <Input
+            styling={signUpStyle}
             placeholder="First Name"
             name="firstName"
             value={state.firstName}
             onChange={handleInputChange}
           />
           <Input
+            styling={signUpStyle}
             placeholder="Last Name"
             name="lastName"
             value={state.lastName}
             onChange={handleInputChange}
           />
-          <Button
-            onClick={handleSubmit}
-            styling={{
-              someBgColor: "azure",
-            }}
-          >
+          <Button onClick={handleSubmit} styling={submitStyle}>
             SUBMIT
           </Button>
         </Wrapper>
@@ -165,53 +162,13 @@ const App = () => {
         <h1>USERS FROM BACKEND</h1>
         <Wrapper>
           <Wrapper className="user-list">
-            <table>
-              <tbody>
-                {state.users &&
-                  state.users.map((user: iUser, idx: number) => {
-                    return (
-                      <tr key={`user-data-row${idx}`}>
-                        <td>
-                          {" "}
-                          {isEdit(user.id) ? (
-                            <input
-                              id={`editForm-${user.id}`}
-                              value={user?.name}
-                              onChange={handleEditFormChange}
-                            />
-                          ) : (
-                            user?.name
-                          )}
-                        </td>
-
-                        <td>
-                          <button
-                            id={`edit-${user?.id}`}
-                            value={user.name}
-                            className="button"
-                            onClick={() =>
-                              handleEdit(`edit-${user?.id}`, user.name)
-                            }
-                          >
-                            Edit
-                          </button>
-                        </td>
-
-                        <td>
-                          <button
-                            id={user.id}
-                            className="button"
-                            onClick={() => handleDelete(user.id)}
-                            disabled={isEdit(user.id)}
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
+            <UserTable
+              users={state.users}
+              isEdit={isEdit}
+              handleEdit={handleEdit}
+              handleDelete={handleDelete}
+              handleEditFormChange={handleEditFormChange}
+            />
           </Wrapper>
         </Wrapper>
       </Container>

@@ -1,3 +1,5 @@
+import { ChangeEvent } from "react";
+
 export interface iUser {
   id: string;
   name: string;
@@ -40,4 +42,12 @@ export interface iCallApi {
   params?: {
     id?: string;
   } | null;
+}
+
+export interface iUserTable {
+  users: iUser[];
+  isEdit: (id: string) => boolean;
+  handleEdit: (id: string, name: string) => void;
+  handleDelete: (id: string) => void;
+  handleEditFormChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
