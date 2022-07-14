@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { BACKEND_API } from "../data/constants";
 import { callApi } from "../utils/helpers";
-import { Container, Wrapper, Button, Input } from "./styledComponents";
+import { Container, Wrapper, Button, Input } from "./common";
 import { iUser, iState } from "../interfaces";
 
 const App = () => {
@@ -74,14 +74,17 @@ const App = () => {
       setState({
         ...state,
         edit: state.edit.concat(editId),
-        editForm: [...state.editForm, { id: `editform-${editId}`, name }],
+        editForm: [
+          ...state.editForm,
+           { id: `editform-${editId}`, name }],
       });
     };
 
     const upDateChanges = async () => {
       setState({
         ...state,
-        edit: state.edit.filter((id) => id !== editId),
+        edit: state.edit.filter((id) => 
+        id !== editId),
       });
 
       const editedUser = state.users.filter(
