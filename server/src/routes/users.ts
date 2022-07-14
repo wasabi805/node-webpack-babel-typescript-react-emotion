@@ -1,12 +1,11 @@
 import express from "express";
-import { AxiosPromise } from "axios";
 import { v4 as uuidv4 } from "uuid";
 const router = express.Router();
 
 import { fetchApi } from "./helpers";
 import { iUser } from "../utils/interfaces";
 
-let users: iUser[] | AxiosPromise[] | any = [];
+let users: iUser[] = [];
 
 router.get("/", async (req, res) => {
   let url = "https://jsonplaceholder.typicode.com/users";
@@ -19,7 +18,6 @@ router.get("/", async (req, res) => {
       return user;
     });
 
-    console.log(newUsers);
     users = newUsers;
     res.send(users);
   } else {
@@ -40,7 +38,6 @@ router.post("/add-user", (req, res) => {
 
 router.patch("/edit-user", (req, res) => {
   const { id, name } = req.body;
-  console.log({ id, name });
   const updateByIndex = users.map((user: iUser) => user.id).indexOf(id);
   users[updateByIndex].name = name;
 

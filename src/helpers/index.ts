@@ -1,18 +1,4 @@
-interface iCallApi {
-  method: string;
-  url: string;
-  body?: {
-    users?: any;
-    id?: number;
-    name?: string;
-    firstName?: string;
-    lastName?: string;
-  };
-
-  params?: {
-    id?: string;
-  } | null;
-}
+import { iCallApi } from "../utils/interfaces";
 
 export const callApi = async ({ method, url, body, params }: iCallApi) => {
   const options = {
@@ -23,7 +9,7 @@ export const callApi = async ({ method, url, body, params }: iCallApi) => {
   };
 
   try {
-    const response: Promise<iCallApi> = await fetch(url, {
+    const response = await fetch(url, {
       ...options,
       headers: { "Content-Type": "application/json" },
     }).then((res) => res.json());

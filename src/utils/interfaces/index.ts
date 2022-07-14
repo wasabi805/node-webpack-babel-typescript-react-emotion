@@ -1,5 +1,5 @@
 export interface iUser {
-  id: number;
+  id: string;
   name: string;
   username?: string;
   email?: string;
@@ -17,4 +17,27 @@ export interface iUser {
     catchPhrase: string;
     bs: string;
   };
+}
+
+export interface iState {
+  users: iUser[];
+  firstName: string;
+  lastName: string;
+  edit: string[];
+  editForm: any;
+}
+
+export interface iCallApi {
+  method: string;
+  url: string;
+  body?: {
+    id?: string;
+    name?: string;
+    firstName?: string;
+    lastName?: string;
+  };
+
+  params?: {
+    id?: string;
+  } | null;
 }

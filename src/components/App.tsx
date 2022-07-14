@@ -2,14 +2,7 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import { BACKEND_API } from "../utils/constants";
 import { callApi } from "../helpers";
 import { Container, Wrapper, Button, Input } from "./styledComponents";
-
-interface iState {
-  users: any;
-  firstName: string;
-  lastName: string;
-  edit: number[];
-  editForm: any;
-}
+import { iUser, iState } from "../utils/interfaces";
 
 const App = () => {
   const [state, setState] = useState<iState>({
@@ -56,9 +49,7 @@ const App = () => {
     });
   };
 
-  const handleDelete = async (e: any) => {
-    const { id } = e.target;
-
+  const handleDelete = async (id: string) => {
     const users = await callApi({
       method: "DELETE",
       url: `${BACKEND_API}/users/delete-user`,
@@ -71,12 +62,10 @@ const App = () => {
     });
   };
 
-  const isEdit = (userId: any) => {
-    return state.edit.filter((editId: any) => editId === userId).length > 0;
-  };
+  const isEdit = (userId: string) =>
+    state.edit.filter((editId: string) => editId === userId).length > 0;
 
-  const handleEdit = async (e: any) => {
-    const { id, value } = e.target;
+  const handleEdit = async (id: string, name: string) => {
     const editId = id.split("edit-")[1];
 
     const hasId = state.edit.filter((id) => id === editId).length > 0;
@@ -85,10 +74,7 @@ const App = () => {
       setState({
         ...state,
         edit: state.edit.concat(editId),
-        editForm: [
-          ...state.editForm,
-          { id: `editform-${editId}`, name: value },
-        ],
+        editForm: [...state.editForm, { id: `editform-${editId}`, name }],
       });
     };
 
@@ -99,7 +85,7 @@ const App = () => {
       });
 
       const editedUser = state.users.filter(
-        (user: any) => user.id === editId
+        (user: iUser) => user.id === editId
       )[0];
 
       await callApi({
@@ -119,17 +105,19 @@ const App = () => {
     loadUsers();
   }, []);
 
-  const handleEditFormChange = (e: any) => {
+  const handleEditFormChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     const userId = id.split("editForm-")[1];
 
-    //find the user with userId in the users array
     const updatedUser = {
       id: userId,
       name: value,
     };
 
-    const updateIdx = state.users.findIndex((user: any) => user.id === userId);
+    //find the user with userId in the users array
+    const updateIdx = state.users.findIndex(
+      (user: iUser) => user.id === userId
+    );
 
     const updatedUsers = [...state.users];
     updatedUsers[updateIdx] = updatedUser;
@@ -177,7 +165,7 @@ const App = () => {
             <table>
               <tbody>
                 {state.users &&
-                  state.users.map((user: any, idx: number) => {
+                  state.users.map((user: iUser, idx: number) => {
                     return (
                       <tr key={`user-data-row${idx}`}>
                         <td>
@@ -198,7 +186,9 @@ const App = () => {
                             id={`edit-${user?.id}`}
                             value={user.name}
                             className="button"
-                            onClick={handleEdit}
+                            onClick={() =>
+                              handleEdit(`edit-${user?.id}`, user.name)
+                            }
                           >
                             Edit
                           </button>
@@ -208,7 +198,7 @@ const App = () => {
                           <button
                             id={user.id}
                             className="button"
-                            onClick={handleDelete}
+                            onClick={() => handleDelete(user.id)}
                             disabled={isEdit(user.id)}
                           >
                             Delete
