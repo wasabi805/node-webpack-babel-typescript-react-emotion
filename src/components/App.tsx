@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect, ChangeEvent, FC } from "react";
 import {
   BACKEND_API,
   FORM_HEADING,
@@ -10,8 +10,9 @@ import Button, { submitStyle } from "./common/Button";
 import { iUser, iState } from "../interfaces";
 import Input, { signUpStyle } from "./common/Input";
 import UserTable from "./UserTable";
+import { useAppContext } from "../context/AppContext";
 
-const App = () => {
+const App: FC = (): JSX.Element => {
   const [state, setState] = useState<iState>({
     users: [],
     firstName: "",
@@ -19,6 +20,8 @@ const App = () => {
     edit: [],
     editForm: [],
   });
+
+  // const {state, dispatch} = useAppContext()
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

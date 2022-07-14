@@ -51,3 +51,27 @@ export interface iUserTable {
   handleDelete: (id: string) => void;
   handleEditFormChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
+
+export interface iInitialState {
+  users: iUser[];
+  firstName: string;
+  lastName: string;
+  edit: string[];
+  editForm: any;
+}
+
+export interface iAppContext {
+  state: iInitialState;
+  dispatch: () => void;
+}
+
+export interface iAppProvider {}
+
+export interface iAction {
+  type: string;
+  payload?: {};
+}
+
+export interface iAppActions {
+  [key: string]: (state: iInitialState, action: iAction) => {};
+}
