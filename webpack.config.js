@@ -85,7 +85,7 @@ module.exports = {
     ],
   },
   plugins: [
-    new HtmlWebpackPlugin({ template: "src/html/index.html" }),
+    new HtmlWebpackPlugin({ template: "src/assets/html/index.html" }),
     new CleanWebpackPlugin(),
   ],
   resolve: {

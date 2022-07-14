@@ -1,8 +1,8 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import { BACKEND_API } from "../utils/constants";
-import { callApi } from "../helpers";
+import { BACKEND_API } from "../data/constants";
+import { callApi } from "../utils/helpers";
 import { Container, Wrapper, Button, Input } from "./styledComponents";
-import { iUser, iState } from "../utils/interfaces";
+import { iUser, iState } from "../interfaces";
 
 const App = () => {
   const [state, setState] = useState<iState>({

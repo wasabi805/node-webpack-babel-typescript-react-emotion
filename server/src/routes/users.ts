@@ -13,7 +13,6 @@ router.get("/", async (req, res) => {
     const response = await fetchApi({ method: "GET", url });
 
     const newUsers = Object.values(response).map((user) => {
-      console.log(user);
       user.id = uuidv4();
       return user;
     });

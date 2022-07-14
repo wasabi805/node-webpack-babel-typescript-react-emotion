@@ -1,4 +1,4 @@
-import { iCallApi } from "../utils/interfaces";
+import { iCallApi } from "../../interfaces";
 
 export const callApi = async ({ method, url, body, params }: iCallApi) => {
   const options = {
