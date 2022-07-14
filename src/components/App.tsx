@@ -1,5 +1,9 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import { BACKEND_API } from "../data/constants";
+import {
+  BACKEND_API,
+  FORM_HEADING,
+  USER_TABLE_HEADING,
+} from "../data/constants";
 import { callApi } from "../utils/helpers";
 import { Container, Wrapper } from "./common";
 import Button, { submitStyle } from "./common/Button";
@@ -136,7 +140,7 @@ const App = () => {
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
       <Container>
-        <h1>SIGN UP</h1>
+        <h1>{FORM_HEADING}</h1>
         <Wrapper>
           <Input
             styling={signUpStyle}
@@ -159,7 +163,7 @@ const App = () => {
       </Container>
 
       <Container>
-        <h1>USERS FROM BACKEND</h1>
+        <h1>{USER_TABLE_HEADING}</h1>
         <Wrapper>
           <Wrapper className="user-list">
             <UserTable
