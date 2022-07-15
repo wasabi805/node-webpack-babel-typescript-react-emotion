@@ -1,9 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, FC } from "react";
-import {
-  BACKEND_API,
-  FORM_HEADING,
-  USER_TABLE_HEADING,
-} from "../data/constants";
+import * as usersActions from "../actions/usersActions";
+import * as constants from "../data/constants";
 import { callApi } from "../utils/helpers";
 import { Container, Wrapper } from "./common";
 import Button, { submitStyle } from "./common/Button";
@@ -11,15 +8,6 @@ import { iUser, iState } from "../interfaces";
 import Input, { signUpStyle } from "./common/Input";
 import UserTable from "./UserTable";
 import { useAppContext } from "../context/AppContext";
-import {
-  getAllUsers,
-  setNewUserInputChange,
-  submitNewUser,
-  deleteUser,
-  createEditForm,
-  updateEditedUser,
-  setEditUserInputChange,
-} from "../actions/usersActions";
 
 const App: FC = (): JSX.Element => {
   const [state, setState] = useState<iState>({
@@ -34,38 +22,38 @@ const App: FC = (): JSX.Element => {
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    dispatch(setNewUserInputChange(name, value));
+    dispatch(usersActions.setNewUserInputChange(name, value));
   };
 
   const loadUsers = async () => {
     const users = await callApi({
       method: "GET",
-      url: `${BACKEND_API}/users`,
+      url: `${constants.BACKEND_API}/users`,
     });
-    dispatch(getAllUsers(users));
+    dispatch(usersActions.getAllUsers(users));
   };
 
   const handleSubmit = async () => {
     const users = await callApi({
       method: "POST",
-      url: `${BACKEND_API}/users/add-user`,
+      url: `${constants.BACKEND_API}/users/add-user`,
       body: {
         firstName: reducerState.createUser.firstName,
         lastName: reducerState.createUser.lastName,
       },
     });
 
-    dispatch(submitNewUser(users));
+    dispatch(usersActions.submitNewUser(users));
   };
 
   const handleDelete = async (id: string) => {
     const users = await callApi({
       method: "DELETE",
-      url: `${BACKEND_API}/users/delete-user`,
+      url: `${constants.BACKEND_API}/users/delete-user`,
       body: { id },
     });
 
-    dispatch(deleteUser(users));
+    dispatch(usersActions.deleteUser(users));
   };
 
   const isEdit = (userId: string) =>
@@ -77,7 +65,7 @@ const App: FC = (): JSX.Element => {
 
     const handleCreateEditForm = () => {
       dispatch(
-        createEditForm(reducerState.edit.concat(editId), [
+        usersActions.createEditForm(reducerState.edit.concat(editId), [
           ...reducerState.editForm,
           { id: `editform-${editId}`, name },
         ])
@@ -85,7 +73,9 @@ const App: FC = (): JSX.Element => {
     };
 
     const handleUpDateChanges = async () => {
-      dispatch(updateEditedUser(state.edit.filter((id) => id !== editId)));
+      dispatch(
+        usersActions.updateEditedUser(state.edit.filter((id) => id !== editId))
+      );
 
       const editedUser = reducerState.users.filter(
         (user: iUser) => user.id === editId
@@ -93,7 +83,7 @@ const App: FC = (): JSX.Element => {
 
       await callApi({
         method: "PATCH",
-        url: `${BACKEND_API}/users/edit-user`,
+        url: `${constants.BACKEND_API}/users/edit-user`,
         body: {
           id: editId,
           name: editedUser.name,
@@ -113,7 +103,7 @@ const App: FC = (): JSX.Element => {
     const userId = id.split("editForm-")[1];
 
     dispatch(
-      setEditUserInputChange({
+      usersActions.setEditUserInputChange({
         userId,
         value,
         users: reducerState.users,
@@ -126,7 +116,7 @@ const App: FC = (): JSX.Element => {
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
       <Container>
-        <h1>{FORM_HEADING}</h1>
+        <h1>{constants.FORM_HEADING}</h1>
         <Wrapper>
           <Input
             styling={signUpStyle}
@@ -149,7 +139,7 @@ const App: FC = (): JSX.Element => {
       </Container>
 
       <Container>
-        <h1>{USER_TABLE_HEADING}</h1>
+        <h1>{constants.USER_TABLE_HEADING}</h1>
         <Wrapper>
           <Wrapper className="user-list">
             <UserTable

@@ -1,7 +1,8 @@
 import { iUser } from "../interfaces";
+import { iSetEditUserInputChange } from "../interfaces";
 
 export const GET_ALL_USERS = "GET_ALL_USERS";
-export const getAllUsers = (users: any) => {
+export const getAllUsers = (users: iUser[]) => {
   return {
     type: GET_ALL_USERS,
     payload: { users },
@@ -21,7 +22,7 @@ export const setNewUserInputChange = (name: string, value: string) => {
 };
 
 export const SUBMIT_NEW_USER = "SUBMIT_NEW_USER";
-export const submitNewUser = (users: any) => {
+export const submitNewUser = (users: iUser[]) => {
   return {
     type: SUBMIT_NEW_USER,
     payload: {
@@ -31,7 +32,7 @@ export const submitNewUser = (users: any) => {
 };
 
 export const DELETE_USER = "DELETE_USER";
-export const deleteUser = (users: any) => {
+export const deleteUser = (users: iUser[]) => {
   return {
     type: DELETE_USER,
     payload: {
@@ -62,7 +63,11 @@ export const updateEditedUser = (edit: string[]) => {
 };
 
 export const SET_EDIT_USER_INPUT_CHANGE = "SET_EDIT_USER_INPUT_CHANGE";
-export const setEditUserInputChange = ({ userId, value, users }: any) => {
+export const setEditUserInputChange = ({
+  userId,
+  value,
+  users,
+}: iSetEditUserInputChange) => {
   const updatedUser = {
     id: userId,
     name: value,

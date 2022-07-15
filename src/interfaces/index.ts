@@ -26,7 +26,7 @@ export interface iState {
   firstName: string;
   lastName: string;
   edit: string[];
-  editForm: any;
+  editForm: iUser[];
 }
 
 export interface iCallApi {
@@ -59,26 +59,33 @@ export interface iInitialState {
     lastName: string;
   };
   edit: string[];
-  editForm: any;
+  editForm: iUser[];
 }
 
 export interface iAppContext {
   state: iInitialState;
-  dispatch: any;
+  dispatch: (fn: iAction) => void;
 }
-
-export interface iAppProvider {}
 
 export interface iAction {
   type: string;
   payload?: {
-    users: any;
-    createUser: any;
-    edit: any;
-    editForm: any;
+    users?: iUser[];
+    createUser?: {
+      firstName?: string;
+      lastName?: string;
+    };
+    edit?: string[];
+    editForm?: iUser[];
   };
 }
 
 export interface iAppActions {
   [key: string]: (state: iInitialState, action: iAction) => {};
+}
+
+export interface iSetEditUserInputChange {
+  userId: string;
+  value: string;
+  users: iUser[];
 }
