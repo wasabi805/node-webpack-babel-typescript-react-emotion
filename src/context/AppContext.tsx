@@ -1,6 +1,6 @@
 // see https://javascript.works-hub.com/learn/building-with-react-context-provider-pattern-1af4b
 import React, { createContext, useContext, useReducer, FC } from "react";
-import { iAppContext } from "../interfaces";
+import { iAppContext } from "interfaces";
 
 import appReducer from "../reducers/index";
 import initialState from "../data/initialState";

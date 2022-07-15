@@ -1,5 +1,5 @@
-import { iUser } from "../interfaces";
-import { iSetEditUserInputChange } from "../interfaces";
+import { iUser } from "interfaces";
+import { iSetEditUserInputChange } from "interfaces";
 
 export const GET_ALL_USERS = "GET_ALL_USERS";
 export const getAllUsers = (users: iUser[]) => {

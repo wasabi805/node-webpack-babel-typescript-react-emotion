@@ -1,4 +1,4 @@
-import { iInitialState, iAction } from "../../interfaces";
+import { iInitialState, iAction } from "interfaces";
 
 export const getAllUsers = (state: iInitialState, action: iAction) => {
   return {

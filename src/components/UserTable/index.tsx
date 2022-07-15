@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import Input from "../common/Input";
 import Button from "../common/Button";
-import { iUser, iUserTable } from "../../interfaces";
+import { iUser, iUserTable } from "interfaces";
 
 const UserTable: FC<iUserTable> = ({
   users,

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { iBaseStyling } from "../../../interfaces/style";
+import { iBaseStyling } from "interfaces/style";
 
 const Input = styled.input`
   margin-bottom: ${(props: iBaseStyling) => props?.styling?.marginBottom};

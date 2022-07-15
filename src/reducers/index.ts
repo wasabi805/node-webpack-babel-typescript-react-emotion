@@ -1,4 +1,4 @@
-import { iAppActions, iAction } from "../interfaces";
+import { iAppActions, iAction } from "interfaces";
 
 import * as userSlice from "../reducers/slices/usersSlice";
 import {

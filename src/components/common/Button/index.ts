@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { iButton } from "../../../interfaces/style";
+import { iButton } from "interfaces/style";
 
 const Button = styled.button`
   background: ${(props: iButton) => props?.styling?.background};

@@ -1,4 +1,4 @@
-import { iInitialState } from "../interfaces";
+import { iInitialState } from "interfaces";
 
 const initialState: iInitialState = {
   users: [],
