@@ -11,6 +11,15 @@ import { iUser, iState } from "../interfaces";
 import Input, { signUpStyle } from "./common/Input";
 import UserTable from "./UserTable";
 import { useAppContext } from "../context/AppContext";
+import {
+  getAllUsers,
+  setNewUserInputChange,
+  submitNewUser,
+  deleteUser,
+  createEditForm,
+  updateEditedUser,
+  setEditUserInputChange,
+} from "../actions/usersActions";
 
 const App: FC = (): JSX.Element => {
   const [state, setState] = useState<iState>({
@@ -21,14 +30,11 @@ const App: FC = (): JSX.Element => {
     editForm: [],
   });
 
-  // const {state, dispatch} = useAppContext()
+  const { state: reducerState, dispatch } = useAppContext();
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setState({
-      ...state,
-      [name]: value,
-    });
+    dispatch(setNewUserInputChange(name, value));
   };
 
   const loadUsers = async () => {
@@ -36,11 +42,7 @@ const App: FC = (): JSX.Element => {
       method: "GET",
       url: `${BACKEND_API}/users`,
     });
-
-    setState({
-      ...state,
-      users,
-    });
+    dispatch(getAllUsers(users));
   };
 
   const handleSubmit = async () => {
@@ -48,15 +50,12 @@ const App: FC = (): JSX.Element => {
       method: "POST",
       url: `${BACKEND_API}/users/add-user`,
       body: {
-        firstName: state.firstName,
-        lastName: state.lastName,
+        firstName: reducerState.createUser.firstName,
+        lastName: reducerState.createUser.lastName,
       },
     });
 
-    setState({
-      ...state,
-      users,
-    });
+    dispatch(submitNewUser(users));
   };
 
   const handleDelete = async (id: string) => {
@@ -66,35 +65,29 @@ const App: FC = (): JSX.Element => {
       body: { id },
     });
 
-    setState({
-      ...state,
-      users: users,
-    });
+    dispatch(deleteUser(users));
   };
 
   const isEdit = (userId: string) =>
-    state.edit.filter((editId: string) => editId === userId).length > 0;
+    reducerState.edit.filter((editId: string) => editId === userId).length > 0;
 
   const handleEdit = async (id: string, name: string) => {
     const editId = id.split("edit-")[1];
+    const hasId = reducerState.edit.filter((id) => id === editId).length > 0;
 
-    const hasId = state.edit.filter((id) => id === editId).length > 0;
-
-    const createEditForm = () => {
-      setState({
-        ...state,
-        edit: state.edit.concat(editId),
-        editForm: [...state.editForm, { id: `editform-${editId}`, name }],
-      });
+    const handleCreateEditForm = () => {
+      dispatch(
+        createEditForm(reducerState.edit.concat(editId), [
+          ...reducerState.editForm,
+          { id: `editform-${editId}`, name },
+        ])
+      );
     };
 
-    const upDateChanges = async () => {
-      setState({
-        ...state,
-        edit: state.edit.filter((id) => id !== editId),
-      });
+    const handleUpDateChanges = async () => {
+      dispatch(updateEditedUser(state.edit.filter((id) => id !== editId)));
 
-      const editedUser = state.users.filter(
+      const editedUser = reducerState.users.filter(
         (user: iUser) => user.id === editId
       )[0];
 
@@ -108,7 +101,7 @@ const App: FC = (): JSX.Element => {
       });
     };
 
-    !hasId ? createEditForm() : upDateChanges();
+    !hasId ? handleCreateEditForm() : handleUpDateChanges();
   };
 
   useEffect(() => {
@@ -119,23 +112,13 @@ const App: FC = (): JSX.Element => {
     const { id, value } = e.target;
     const userId = id.split("editForm-")[1];
 
-    const updatedUser = {
-      id: userId,
-      name: value,
-    };
-
-    //find the user with userId in the users array
-    const updateIdx = state.users.findIndex(
-      (user: iUser) => user.id === userId
+    dispatch(
+      setEditUserInputChange({
+        userId,
+        value,
+        users: reducerState.users,
+      })
     );
-
-    const updatedUsers = [...state.users];
-    updatedUsers[updateIdx] = updatedUser;
-
-    setState({
-      ...state,
-      users: updatedUsers,
-    });
   };
 
   return (
@@ -149,14 +132,14 @@ const App: FC = (): JSX.Element => {
             styling={signUpStyle}
             placeholder="First Name"
             name="firstName"
-            value={state.firstName}
+            value={reducerState.createUser.firstName}
             onChange={handleInputChange}
           />
           <Input
             styling={signUpStyle}
             placeholder="Last Name"
             name="lastName"
-            value={state.lastName}
+            value={reducerState.createUser.lastName}
             onChange={handleInputChange}
           />
           <Button onClick={handleSubmit} styling={submitStyle}>
@@ -170,7 +153,7 @@ const App: FC = (): JSX.Element => {
         <Wrapper>
           <Wrapper className="user-list">
             <UserTable
-              users={state.users}
+              users={reducerState.users}
               isEdit={isEdit}
               handleEdit={handleEdit}
               handleDelete={handleDelete}

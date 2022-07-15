@@ -1,6 +1,8 @@
-import React, { Component, createContext, useContext, useReducer } from "react";
+// see https://javascript.works-hub.com/learn/building-with-react-context-provider-pattern-1af4b
+import React, { createContext, useContext, useReducer } from "react";
 import { iAppContext, iAppProvider } from "../interfaces";
 
+import appReducer from "../reducers/index";
 import initialState from "../data/initialState";
 
 const AppContext = createContext<iAppContext>({
@@ -9,11 +11,13 @@ const AppContext = createContext<iAppContext>({
 });
 
 export const AppProvider = ({ children }: any): JSX.Element => {
+  const [state, dispatch] = useReducer(appReducer, initialState);
+
   return (
     <AppContext.Provider
       value={{
-        state: initialState,
-        dispatch: () => {},
+        state,
+        dispatch,
       }}
     >
       {...children}

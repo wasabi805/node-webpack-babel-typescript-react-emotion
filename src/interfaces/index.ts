@@ -54,22 +54,29 @@ export interface iUserTable {
 
 export interface iInitialState {
   users: iUser[];
-  firstName: string;
-  lastName: string;
+  createUser: {
+    firstName: string;
+    lastName: string;
+  };
   edit: string[];
   editForm: any;
 }
 
 export interface iAppContext {
   state: iInitialState;
-  dispatch: () => void;
+  dispatch: any;
 }
 
 export interface iAppProvider {}
 
 export interface iAction {
   type: string;
-  payload?: {};
+  payload?: {
+    users: any;
+    createUser: any;
+    edit: any;
+    editForm: any;
+  };
 }
 
 export interface iAppActions {

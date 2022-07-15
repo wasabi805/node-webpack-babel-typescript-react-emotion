@@ -2,8 +2,10 @@ import { iInitialState } from "../interfaces";
 
 const initialState: iInitialState = {
   users: [],
-  firstName: "",
-  lastName: "",
+  createUser: {
+    firstName: "",
+    lastName: "",
+  },
   edit: [],
   editForm: [],
 };
