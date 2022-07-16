@@ -5,16 +5,16 @@ import { iAppContext } from "interfaces";
 import appReducer from "../reducers/index";
 import initialState from "../data/initialState";
 
-const AppContext = createContext<iAppContext>({
+export const AppContext = createContext<iAppContext>({
   state: initialState,
   dispatch: () => {},
 });
 
-interface iAppProviderProps{
-  children: React.ReactNode[]
+interface iAppProviderProps {
+  children: React.ReactNode;
 }
 
-export const AppProvider: FC<iAppProviderProps> = ({ children }: iAppProviderProps) => {
+export const AppProvider: FC<iAppProviderProps> = ({ children }: any) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
 
   return (
@@ -24,7 +24,7 @@ export const AppProvider: FC<iAppProviderProps> = ({ children }: iAppProviderPro
         dispatch,
       }}
     >
-      {[...children]}
+      {children}
     </AppContext.Provider>
   );
 };

@@ -11,7 +11,7 @@ const UserTable: FC<iUserTable> = ({
   handleEditFormChange,
 }): JSX.Element => {
   return (
-    <table>
+    <table id="user-table" data-testid="user-table">
       <tbody>
         {users &&
           users.map((user: iUser, idx: number) => {
@@ -22,6 +22,7 @@ const UserTable: FC<iUserTable> = ({
                   {isEdit(user.id) ? (
                     <Input
                       id={`editForm-${user.id}`}
+                      data-testid={`editForm-${user.id}`}
                       value={user?.name}
                       onChange={handleEditFormChange}
                     />
@@ -33,6 +34,7 @@ const UserTable: FC<iUserTable> = ({
                 <td>
                   <Button
                     id={`edit-${user?.id}`}
+                    data-testid={`edit-${user?.id}`}
                     value={user.name}
                     className="button"
                     onClick={() => handleEdit(`edit-${user?.id}`, user.name)}

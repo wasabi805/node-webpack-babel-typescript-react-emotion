@@ -10,9 +10,7 @@ import UserTable from "./UserTable";
 import { useAppContext } from "../context/AppContext";
 
 const App: FC = (): JSX.Element => {
-
   const { state, dispatch } = useAppContext();
-
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     dispatch(usersActions.setNewUserInputChange(name, value));

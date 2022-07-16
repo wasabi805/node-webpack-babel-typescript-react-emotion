@@ -89,7 +89,6 @@ module.exports = {
     new CleanWebpackPlugin(),
   ],
   resolve: {
-    
-    extensions: [".tsx", ".ts", ".js", '.jsx', '.json'],
+    extensions: [".tsx", ".ts", ".js", ".jsx", ".json"],
   },
 };
