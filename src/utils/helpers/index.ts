@@ -16,6 +16,6 @@ export const callApi = async ({ method, url, body, params }: iCallApi) => {
 
     return response;
   } catch (error) {
-    console.log("there was an error", error);
+    console.log("there was an error!!!!!", error);
   }
 };

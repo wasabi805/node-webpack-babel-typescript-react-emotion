@@ -11,6 +11,7 @@ import { useAppContext } from "../context/AppContext";
 
 const App: FC = (): JSX.Element => {
   const { state, dispatch } = useAppContext();
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     dispatch(usersActions.setNewUserInputChange(name, value));
@@ -37,70 +38,11 @@ const App: FC = (): JSX.Element => {
     dispatch(usersActions.submitNewUser(users));
   };
 
-  const handleDelete = async (id: string) => {
-    const users = await callApi({
-      method: "DELETE",
-      url: `${constants.BACKEND_API}/users/delete-user`,
-      body: { id },
-    });
-
-    dispatch(usersActions.deleteUser(users));
-  };
-
-  const isEdit = (userId: string) =>
-    state.edit.filter((editId: string) => editId === userId).length > 0;
-
-  const handleEdit = async (id: string, name: string) => {
-    const editId = id.split("edit-")[1];
-    const hasId = state.edit.filter((id) => id === editId).length > 0;
-
-    const handleCreateEditForm = () => {
-      dispatch(
-        usersActions.createEditForm(state.edit.concat(editId), [
-          ...state.editForm,
-          { id: `editform-${editId}`, name },
-        ])
-      );
-    };
-
-    const handleUpDateChanges = async () => {
-      dispatch(
-        usersActions.updateEditedUser(state.edit.filter((id) => id !== editId))
-      );
-
-      const editedUser = state.users.filter(
-        (user: iUser) => user.id === editId
-      )[0];
-
-      await callApi({
-        method: "PATCH",
-        url: `${constants.BACKEND_API}/users/edit-user`,
-        body: {
-          id: editId,
-          name: editedUser.name,
-        },
-      });
-    };
-
-    !hasId ? handleCreateEditForm() : handleUpDateChanges();
-  };
+  //TODO MOVE INTO USERSTABLE COMPONENT
 
   useEffect(() => {
     loadUsers();
   }, []);
-
-  const handleEditFormChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
-    const userId = id.split("editForm-")[1];
-
-    dispatch(
-      usersActions.setEditUserInputChange({
-        userId,
-        value,
-        users: state.users,
-      })
-    );
-  };
 
   return (
     <div
@@ -133,13 +75,7 @@ const App: FC = (): JSX.Element => {
         <h1>{constants.USER_TABLE_HEADING}</h1>
         <Wrapper>
           <Wrapper className="user-list">
-            <UserTable
-              users={state.users}
-              isEdit={isEdit}
-              handleEdit={handleEdit}
-              handleDelete={handleDelete}
-              handleEditFormChange={handleEditFormChange}
-            />
+            <UserTable users={state.users} />
           </Wrapper>
         </Wrapper>
       </Container>

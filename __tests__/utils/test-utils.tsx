@@ -1,16 +1,33 @@
-import React, { FC, ReactElement } from "react";
-import { AppContext } from "../../src/context/AppContext";
+import React, { FC, ReactElement, useContext, createContext } from "react";
+import { iAppContext } from "../../src/interfaces";
 import { render, RenderOptions } from "@testing-library/react";
-import initialState from "../../src/data/initialState";
 
-export const dispatchMock = jest.fn();
+export const mockState = {
+  users: [
+    { id: "1", name: "tim" },
+    { id: "2", name: "kayla" },
+  ],
+  createUser: {
+    firstName: "",
+    lastName: "",
+  },
+  edit: [],
+  editForm: [],
+};
+
+export const AppContext = createContext<iAppContext>({
+  state: mockState,
+  dispatch: () => {},
+});
+
+export const dispatchMock = jest.fn(() => useContext(AppContext).dispatch);
 
 export const AppWrapper: FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <AppContext.Provider
       value={{
-        state: initialState,
-        dispatch: dispatchMock,
+        state: mockState,
+        dispatch: () => {},
       }}
     >
       {children}

@@ -46,10 +46,10 @@ export interface iCallApi {
 
 export interface iUserTable {
   users: iUser[];
-  isEdit: (id: string) => boolean;
-  handleEdit: (id: string, name: string) => void;
-  handleDelete: (id: string) => void;
-  handleEditFormChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  // isEdit: (id: string) => boolean;
+  // handleEdit: (id: string, name: string) => void;
+  // handleDelete: (id: string) => void;
+  // handleEditFormChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export interface iInitialState {
