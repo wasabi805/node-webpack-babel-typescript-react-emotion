@@ -28,7 +28,7 @@
     ],
     "automock": false,
     "setupFiles": [
-      "./setupJest.ts"
+      "./__tests__/setupJest.ts"
     ]
   },
   "author": "",

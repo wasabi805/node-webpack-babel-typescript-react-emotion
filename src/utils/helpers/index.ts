@@ -12,10 +12,13 @@ export const callApi = async ({ method, url, body, params }: iCallApi) => {
     const response = await fetch(url, {
       ...options,
       headers: { "Content-Type": "application/json" },
-    }).then((res) => res.json());
+    }).then((res) => res.json()).then(data=>{    
+      return data
+    })
 
     return response;
   } catch (error) {
     console.log("there was an error!!!!!", error);
+    return null
   }
 };
