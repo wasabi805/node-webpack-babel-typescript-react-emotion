@@ -1,5 +1,3 @@
-import { ChangeEvent } from "react";
-
 export interface iUser {
   id: string;
   name: string;
@@ -38,18 +36,10 @@ export interface iCallApi {
     firstName?: string;
     lastName?: string;
   };
-
-  params?: {
-    id?: string;
-  } | null;
 }
 
 export interface iUserTable {
   users: iUser[];
-  // isEdit: (id: string) => boolean;
-  // handleEdit: (id: string, name: string) => void;
-  // handleDelete: (id: string) => void;
-  // handleEditFormChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export interface iInitialState {
@@ -64,7 +54,8 @@ export interface iInitialState {
 
 export interface iAppContext {
   state: iInitialState;
-  dispatch: (fn: iAction) => void;
+  // dispatch: (fn: iAction) => void;
+  dispatch: any;
 }
 
 export interface iAction {

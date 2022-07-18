@@ -17,14 +17,6 @@ const App: FC = (): JSX.Element => {
     dispatch(usersActions.setNewUserInputChange(name, value));
   };
 
-  const loadUsers = async () => {
-    const users = await callApi({
-      method: "GET",
-      url: `${constants.BACKEND_API}/users`,
-    });
-    dispatch(usersActions.getAllUsers(users));
-  };
-
   const handleSubmit = async () => {
     const users = await callApi({
       method: "POST",
@@ -38,12 +30,6 @@ const App: FC = (): JSX.Element => {
     dispatch(usersActions.submitNewUser(users));
   };
 
-  //TODO MOVE INTO USERSTABLE COMPONENT
-
-  useEffect(() => {
-    loadUsers();
-  }, []);
-
   return (
     <div
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
@@ -52,6 +38,7 @@ const App: FC = (): JSX.Element => {
         <h1>{constants.FORM_HEADING}</h1>
         <Wrapper>
           <Input
+            data-testid="user-first-name"
             styling={signUpStyle}
             placeholder="First Name"
             name="firstName"
@@ -59,6 +46,7 @@ const App: FC = (): JSX.Element => {
             onChange={handleInputChange}
           />
           <Input
+            data-testid="user-last-name"
             styling={signUpStyle}
             placeholder="Last Name"
             name="lastName"
@@ -75,7 +63,7 @@ const App: FC = (): JSX.Element => {
         <h1>{constants.USER_TABLE_HEADING}</h1>
         <Wrapper>
           <Wrapper className="user-list">
-            <UserTable users={state.users} />
+            <UserTable />
           </Wrapper>
         </Wrapper>
       </Container>

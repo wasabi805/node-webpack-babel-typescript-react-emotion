@@ -1,4 +1,4 @@
-import React, { FC, ChangeEvent } from "react";
+import React, { FC, useEffect, ChangeEvent } from "react";
 import Input from "../common/Input";
 import Button from "../common/Button";
 import { iUser, iUserTable } from "interfaces";
@@ -7,11 +7,20 @@ import * as constants from "../../data/constants";
 import { callApi } from "../../utils/helpers";
 import * as usersActions from "../../actions/usersActions";
 
-const UserTable: FC<iUserTable> = ({ users }): JSX.Element => {
+const UserTable = (): JSX.Element => {
   const { state, dispatch } = useAppContext();
+
+  const loadUsers = async () => {
+    const users = await callApi({
+      method: "GET",
+      url: `${constants.BACKEND_API}/users`,
+    });
+    dispatch(usersActions.getAllUsers(users));
+  };
 
   const handleDelete = async (id: string) => {
     try {
+      console.log("i did fire");
       const users = await callApi({
         method: "DELETE",
         url: `${constants.BACKEND_API}/users/delete-user`,
@@ -20,7 +29,7 @@ const UserTable: FC<iUserTable> = ({ users }): JSX.Element => {
 
       dispatch(usersActions.deleteUser(users));
     } catch (error) {
-      console.log(error, "NOPE");
+      return null;
     }
   };
 
@@ -75,11 +84,15 @@ const UserTable: FC<iUserTable> = ({ users }): JSX.Element => {
     );
   };
 
+  useEffect(() => {
+    loadUsers();
+  }, []);
+
   return (
     <table id="user-table" data-testid="user-table">
-      <tbody>
-        {users &&
-          users.map((user: iUser, idx: number) => {
+      <tbody data-testid="user-table-body">
+        {state.users &&
+          state.users.map((user: iUser, idx: number) => {
             return (
               <tr key={`user-data-row${idx}`}>
                 <td

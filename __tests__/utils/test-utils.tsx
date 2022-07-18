@@ -1,6 +1,13 @@
-import React, { FC, ReactElement, useContext, createContext } from "react";
+import React, {
+  FC,
+  ReactElement,
+  useContext,
+  createContext,
+  useReducer,
+} from "react";
 import { iAppContext } from "../../src/interfaces";
 import { render, RenderOptions } from "@testing-library/react";
+import appReducer from "../../src/reducers";
 
 export const mockState = {
   users: [
@@ -15,19 +22,22 @@ export const mockState = {
   editForm: [],
 };
 
+const mockCallBack = jest.fn((state, action) => appReducer(state, action));
+
 export const AppContext = createContext<iAppContext>({
   state: mockState,
-  dispatch: () => {},
+  dispatch: mockCallBack,
 });
 
-export const dispatchMock = jest.fn(() => useContext(AppContext).dispatch);
+// export const dispatchMock = jest.fn(() => useContext(AppContext).dispatch);
 
 export const AppWrapper: FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [state, dispatch] = useReducer(mockCallBack, mockState);
   return (
     <AppContext.Provider
       value={{
-        state: mockState,
-        dispatch: () => {},
+        state,
+        dispatch,
       }}
     >
       {children}

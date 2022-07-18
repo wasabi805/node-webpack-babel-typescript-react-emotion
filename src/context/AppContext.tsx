@@ -14,7 +14,10 @@ interface iAppProviderProps {
   children: React.ReactNode;
 }
 
-export const AppProvider: FC<iAppProviderProps> = ({ children }: any) => {
+export const AppProvider: FC<iAppProviderProps> = ({
+  children,
+  props,
+}: any) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
 
   return (
@@ -23,6 +26,7 @@ export const AppProvider: FC<iAppProviderProps> = ({ children }: any) => {
         state,
         dispatch,
       }}
+      {...props}
     >
       {children}
     </AppContext.Provider>
